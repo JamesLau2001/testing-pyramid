@@ -28,7 +28,9 @@ jobs:
           pip install pytest
 
       - name: Run Tests with Pytest
-        run: pytest tests
+        run: |
+            source .venv/bin/activate
+            pytest tests/
 
   terraform:
     needs: test
