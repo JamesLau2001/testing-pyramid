@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automate Duties</title>
+</head>
+<body>
+    <h1>Create a Duty</h1>
+
+    <form action="{{ url_for('create_duties') }}" method="POST">
+        <label for="number">Enter Duty Number:</label>
+        <input type="text" name="number" required><br>
+
+        <label for="description">Enter Duty Description:</label>
+        <input type="text" name="description" required><br>
+
+        <label for="ksbs">Enter KSBs:</label>
+        <input type="text" name="ksbs" required><br>
+
+        <button type="submit">Create Duty</button>
+    </form>
+
+    <h2>All Duties</h2>
+    {% if duties %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Duty Number</th>
+                <th>Duty Description</th>
+                <th>Duty KSBs</th>
+                <th>Completed Status</th>
+            </tr>
+            {% for duty in duties %}
+            <tr>
+                <td>{{ duty.id }}</td>
+                <td>{{ duty.number }}</td>
+                <td>{{ duty.description }}</td>
+                <td>{{ duty.ksbs }}</td>
+                <td>{{ duty.complete }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No duties created yet.</p>
+    {% endif %}
+</body>
+</html>
+
+
