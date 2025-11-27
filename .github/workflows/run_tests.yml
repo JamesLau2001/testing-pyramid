@@ -40,8 +40,11 @@ jobs:
           source venv/bin/activate
           pytest tests/
 
+      - name: Run Flask
+        run: flask run
+
       - name: Install Cypress
         run: pnpm exec cypress install
-        
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
