@@ -11,14 +11,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: latest
-
-      - name: install dependencies
-        run: pnpm install
 
       - name: Set up Python
         uses: actions/setup-python@v4
