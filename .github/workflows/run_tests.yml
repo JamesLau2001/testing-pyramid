@@ -41,7 +41,9 @@ jobs:
           pytest tests/
 
       - name: Run Flask
-        run: flask run
+        run: | 
+          source venv/bin/activate
+          flask run
 
       - name: Install Cypress
         run: pnpm exec cypress install
