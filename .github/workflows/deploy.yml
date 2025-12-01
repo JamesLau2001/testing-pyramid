@@ -1,4 +1,4 @@
-name: test
+name: Deploy if pass tests
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
         with:
           version: latest
 
-      - name: install dependencies
+      - name: Install JavaScript dependencies
         run: pnpm install
 
       - name: Approve Cypress install script
@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.12" 
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python3 -m venv venv
           source venv/bin/activate
@@ -50,3 +50,37 @@ jobs:
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
+  
+  terraform:
+    needs: test
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.ROLE }}
+          aws-region: eu-north-1
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with: 
+          terraform_version: 1.14.0
+
+      - name: Terraform Init
+        run: terraform Init
+
+      - name: Terraform Plan
+        run: terraform plan -lock=false
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -lock=false
+
+      
+
+
+      
