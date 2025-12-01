@@ -31,7 +31,7 @@ resource "aws_instance" "app_server" {
   instance_type          = "t3.micro"
   subnet_id              = "subnet-84e2f4fc"
   vpc_security_group_ids = ["sg-00d5a1d67232f43a4"]
-  key_name               = "testing_pyramid_key"
+  key_name               = "terraform-key"
   user_data = templatefile("${path.module}/cloud-init.yaml.tmpl", {
     instance_name = "james_lau_testing_pyramid"
   })
