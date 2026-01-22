@@ -5,3 +5,5 @@ include
 lib
 pyvenv.cfg
 node_modules
+config.py
+.pytest_cache
