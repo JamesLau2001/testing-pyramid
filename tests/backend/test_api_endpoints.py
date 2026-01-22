@@ -21,3 +21,15 @@ class TestCoinTable:
         response = client.get("/coins")
         assert response.status_code == 200
         assert response.json == []
+
+    def test_coin_table_returns_data(self, client):
+        with app.app_context():
+            new_coin = Coin(coin_name="Software Developer")
+            db.session.add(new_coin)
+            db.session.commit()
+
+        response = client.get("/coins")
+
+        assert response.status_code == 200
+        assert len(response.json) == 1
+        assert response.json[0]["coin_name"] == "Software Developer"

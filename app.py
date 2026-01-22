@@ -5,11 +5,15 @@ import uuid
 from flask_sqlalchemy import SQLAlchemy
 import config
 
+import os
+
 app = Flask(__name__)
 
-duties = []
-
-app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.database}"
+if os.environ.get("db_url"):
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("db_url")
+else:
+    import config
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.database}"
 
 db = SQLAlchemy(app)
 
@@ -30,6 +34,12 @@ class Coin(db.Model):
 
     duties = db.relationship('Duty', secondary=coin_duties, backref='coins')
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "coin_name": self.coin_name,
+        }
+
 class Duty(db.Model):
     __tablename__ = "duties"
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4))
@@ -47,7 +57,8 @@ class KSB(db.Model):
 
 @app.route('/coins', methods=['GET'])
 def get_coins():
-    return [], 200
+    coins = Coin.query.all()
+    return jsonify([c.to_dict() for c in coins])
 
 @app.route('/create-duties', methods=['POST'])
 def create_duties():
