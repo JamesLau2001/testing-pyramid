@@ -60,16 +60,15 @@ def get_coins():
     coins = Coin.query.all()
     return jsonify([c.to_dict() for c in coins])
 
-@app.route('/create-duties', methods=['POST'])
-def create_duties():
-    number = request.form['number']
-    description = request.form['description']
-    ksbs = request.form['ksbs']
+@app.post('/coin')
+def create_coin():
+    data = request.get_json()
 
-    duty = AutomateDutyController.create_duties(number, description, ksbs)
-    duties.append(duty)
+    new_coin = Coin(coin_name=data['coin_name'])
+    db.session.add(new_coin)
+    db.session.commit()
 
-    return redirect(url_for('index'))
+    return jsonify(new_coin.to_dict()), 201
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)

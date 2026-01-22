@@ -33,3 +33,11 @@ class TestCoinTable:
         assert response.status_code == 200
         assert len(response.json) == 1
         assert response.json[0]["coin_name"] == "Software Developer"
+
+    def test_create_coin(self, client):
+        coin_data = {"coin_name": "Test Coin Data"}
+        response = client.post("/coin", json=coin_data)
+
+        assert response.status_code == 201
+        assert response.json["coin_name"] == "Test Coin Data"
+        assert "id" in response.json
