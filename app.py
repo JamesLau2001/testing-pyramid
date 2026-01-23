@@ -74,5 +74,13 @@ def create_coin():
 
     return jsonify(new_coin.to_dict()), 201
 
+@app.route('/coin/<string:coin_id>', methods=['GET'])
+def get_single_coin(coin_id):
+    coin = Coin.query.filter_by(id=coin_id).first()
+    return jsonify(coin.to_dict())
+
+
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)

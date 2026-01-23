@@ -49,3 +49,14 @@ class TestCoinTable:
 
         assert response.status_code == 400
         assert "Coin already exists" in response.json["error"]
+
+    def test_get_single_coin(self, client):
+        coin_data = {"coin_name": "Software Developer's Coin Data"}
+        create_response =client.post("/coin", json=coin_data)
+        coin_id = create_response.json["id"]
+
+        response = client.get(f"/coin/{coin_id}")
+
+        assert response.status_code == 200
+        assert response.json["id"] == coin_id
+        assert response.json["coin_name"] == "Software Developer's Coin Data"
