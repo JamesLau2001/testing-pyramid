@@ -91,10 +91,14 @@ def update_coin(coin_id):
 
 @app.delete('/coin/<string:coin_id>')
 def delete_coin(coin_id):
-    coin = Coin.query.filter_by(id=coin_id).first()
+    coin = Coin.query.get_or_404(coin_id)
     db.session.delete(coin)
     db.session.commit()
     return "Coin successfully deleted", 200
+
+@app.route('/duties', methods=['GET'])
+def get_duties():
+    return [], 200
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)
