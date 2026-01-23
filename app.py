@@ -48,6 +48,12 @@ class Duty(db.Model):
 
     ksbs = db.relationship('KSB', secondary=duty_ksb, backref='ksbs')
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "duty_name": self.duty_name,
+            "description": self.description
+        }
 
 class KSB(db.Model):
     __tablename__ = "ksbs"
@@ -98,7 +104,8 @@ def delete_coin(coin_id):
 
 @app.route('/duties', methods=['GET'])
 def get_duties():
-    return [], 200
+    duties = Duty.query.all()
+    return jsonify([d.to_dict() for d in duties])
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)

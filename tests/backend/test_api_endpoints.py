@@ -101,3 +101,16 @@ class TestDutyTable:
         response = client.get("/duties")
         assert response.status_code == 200
         assert response.json == []
+
+    def test_duty_table_returns_data(self, client):
+        with app.app_context():
+            new_duty = Duty(duty_name="A duty", description="A description")
+            db.session.add(new_duty)
+            db.session.commit()
+
+        response = client.get("/duties")
+
+        assert response.status_code == 200
+        assert len(response.json) == 1
+        assert response.json[0]["duty_name"] == "A duty"
+        assert response.json[0]["description"] == "A description"
