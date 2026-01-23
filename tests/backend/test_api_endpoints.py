@@ -79,3 +79,13 @@ class TestCoinTable:
         
         assert response.status_code == 200
         assert response.json["coin_name"] == "A legitimate random coin"
+    
+    def test_delete_coin(self, client):
+        coin_data = {"coin_name": "Nice coin"}
+        create_response =client.post("/coin", json=coin_data)
+        coin_id = create_response.json["id"]
+        
+        response = client.delete(f"/coin/{coin_id}")
+        
+        assert response.status_code == 200
+        assert "Coin successfully deleted" in response.get_data(as_text=True)

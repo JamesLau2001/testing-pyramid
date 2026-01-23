@@ -86,9 +86,15 @@ def update_coin(coin_id):
     
     coin.coin_name = data['coin_name']
     db.session.commit()
-    
+
     return jsonify(coin.to_dict())
 
+@app.delete('/coin/<string:coin_id>')
+def delete_coin(coin_id):
+    coin = Coin.query.filter_by(id=coin_id).first()
+    db.session.delete(coin)
+    db.session.commit()
+    return "Coin successfully deleted", 200
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)
