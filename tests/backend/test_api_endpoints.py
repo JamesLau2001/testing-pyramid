@@ -1,6 +1,8 @@
 import pytest
 import os
 
+import uuid
+
 os.environ["db_url"] = "sqlite:///:memory:"
 
 from app import app, db, Coin, Duty, KSB
@@ -60,3 +62,9 @@ class TestCoinTable:
         assert response.status_code == 200
         assert response.json["id"] == coin_id
         assert response.json["coin_name"] == "Software Developer's Coin Data"
+
+    def test_get_non_existent_coin_fails(self, client):
+        random_id = str(uuid.uuid4())
+        response = client.get(f"/coin/{random_id}")
+
+        assert response.status_code == 404

@@ -76,7 +76,7 @@ def create_coin():
 
 @app.route('/coin/<string:coin_id>', methods=['GET'])
 def get_single_coin(coin_id):
-    coin = Coin.query.filter_by(id=coin_id).first()
+    coin = Coin.query.get_or_404(coin_id)
     return jsonify(coin.to_dict())
 
 
