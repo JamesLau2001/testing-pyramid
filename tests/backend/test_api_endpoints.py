@@ -150,4 +150,15 @@ class TestDutyTable:
 
         assert response.status_code == 404
 
+    def test_update_duty_name(self, client):
+        duty_data = {"duty_name":"A duty", "description":"A description"}
+        create_response = client.post("/duty", json=duty_data)
+        duty_id = create_response.json["id"]
+        
+        new_duty_data = {"duty_name": "A new duty"}
+        response = client.put(f"/duty/{duty_id}", json=new_duty_data)
+        
+        assert response.status_code == 200
+        assert response.json["duty_name"] == "A new duty"
+
     

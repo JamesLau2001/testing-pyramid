@@ -127,5 +127,14 @@ def get_single_duty(duty_id):
     duty = Duty.query.get_or_404(duty_id)
     return jsonify(duty.to_dict())
 
+@app.route('/duty/<string:duty_id>', methods=['PUT'])
+def update_duty(duty_id):
+    duty = Duty.query.filter_by(id=duty_id).first()
+    data = request.get_json()
+    
+    duty.duty_name = data['duty_name']
+    db.session.commit()
+
+    return jsonify(duty.to_dict())
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)
