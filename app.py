@@ -63,6 +63,10 @@ def get_coins():
 @app.post('/coin')
 def create_coin():
     data = request.get_json()
+    
+    existing_coin = Coin.query.filter_by(coin_name=data['coin_name']).first()
+    if existing_coin:
+        return jsonify({"error": "Coin already exists"}), 400
 
     new_coin = Coin(coin_name=data['coin_name'])
     db.session.add(new_coin)

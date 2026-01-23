@@ -41,3 +41,11 @@ class TestCoinTable:
         assert response.status_code == 201
         assert response.json["coin_name"] == "Test Coin Data"
         assert "id" in response.json
+    
+    def test_create_duplicate_coin_fails(self, client):
+        coin_data = {"coin_name": "Test Coin Data"}
+        client.post("/coin", json=coin_data)
+        response = client.post("/coin",  json=coin_data)    
+
+        assert response.status_code == 400
+        assert "Coin already exists" in response.json["error"]
