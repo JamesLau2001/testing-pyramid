@@ -140,11 +140,11 @@ def update_duty(duty_id):
 
 @app.delete('/duty/<string:duty_id>')
 def delete_duty(duty_id):
-    duty = Duty.query.filter_by(id=duty_id).first()
+    duty = Duty.query.get_or_404(duty_id)
 
     db.session.delete(duty)
     db.session.commit()
-    
+
     return "Duty successfully deleted", 200
 
 if __name__ == '__main__':
