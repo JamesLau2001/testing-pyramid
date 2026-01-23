@@ -68,3 +68,14 @@ class TestCoinTable:
         response = client.get(f"/coin/{random_id}")
 
         assert response.status_code == 404
+    
+    def test_update_coin_name(self, client):
+        coin_data = {"coin_name": "A illegitimate random coin"}
+        create_response =client.post("/coin", json=coin_data)
+        coin_id = create_response.json["id"]
+        
+        new_coin_data = {"coin_name": "A legitimate random coin"}
+        response = client.put(f"/coin/{coin_id}", json=new_coin_data)
+        
+        assert response.status_code == 200
+        assert response.json["coin_name"] == "A legitimate random coin"

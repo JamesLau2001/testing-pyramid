@@ -79,7 +79,15 @@ def get_single_coin(coin_id):
     coin = Coin.query.get_or_404(coin_id)
     return jsonify(coin.to_dict())
 
-
+@app.route('/coin/<string:coin_id>', methods=['PUT'])
+def update_coin(coin_id):
+    coin = Coin.query.get_or_404(coin_id)
+    data = request.get_json()
+    
+    coin.coin_name = data['coin_name']
+    db.session.commit()
+    
+    return jsonify(coin.to_dict())
 
 
 if __name__ == '__main__':
