@@ -110,6 +110,11 @@ def get_duties():
 @app.post('/duty')
 def create_duty():
     data = request.get_json()
+
+    existing_duty = Duty.query.filter_by(duty_name=data['duty_name']).first()
+    if existing_duty:
+        return jsonify({"error": "Duty already exists"}), 400
+    
     new_duty = Duty(duty_name=data['duty_name'], description=data['description'])
 
     db.session.add(new_duty)

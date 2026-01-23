@@ -123,3 +123,11 @@ class TestDutyTable:
         assert response.json["duty_name"] == "A duty"
         assert response.json["description"] == "A description"
         assert "id" in response.json
+
+    def test_create_duplicate_duty_fails(self, client):
+        duty_data = {"duty_name":"A duty", "description":"A description"}
+        client.post("/duty", json=duty_data)
+        response = client.post("/duty",  json=duty_data)    
+
+        assert response.status_code == 400
+        assert "Duty already exists" in response.json["error"]
