@@ -122,6 +122,10 @@ def create_duty():
 
     return jsonify(new_duty.to_dict()), 201
 
+@app.route('/duty/<string:duty_id>', methods=['GET'])
+def get_single_duty(duty_id):
+    duty = Duty.query.filter_by(id=duty_id).first()
+    return jsonify(duty.to_dict())
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)

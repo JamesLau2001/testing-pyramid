@@ -131,3 +131,15 @@ class TestDutyTable:
 
         assert response.status_code == 400
         assert "Duty already exists" in response.json["error"]
+
+    def test_get_duty_by_id(self, client):
+        duty_data = {"duty_name":"A random duty", "description":"A random description"}
+        create_response = client.post("/duty", json=duty_data)
+        duty_id = create_response.json["id"]
+
+        response = client.get(f"/duty/{duty_id}")
+
+        assert response.status_code == 200
+        assert response.json["id"] == duty_id
+        assert response.json["duty_name"] == "A random duty"
+        assert response.json["description"] == "A random description"
