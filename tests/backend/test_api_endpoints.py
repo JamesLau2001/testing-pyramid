@@ -167,4 +167,15 @@ class TestDutyTable:
         
         assert response.status_code == 404
 
+    def test_delete_duty_by_id(self, client):
+        duty_data = {"duty_name":"A nice duty", "description":"A nice description"}
+        create_response = client.post("/duty", json=duty_data)
+        duty_id = create_response.json["id"]
+        
+        response = client.delete(f"/duty/{duty_id}")
+        
+        assert response.status_code == 200
+        assert "Duty successfully deleted" in response.get_data(as_text=True)
+
+
     
