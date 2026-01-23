@@ -124,7 +124,7 @@ def create_duty():
 
 @app.route('/duty/<string:duty_id>', methods=['GET'])
 def get_single_duty(duty_id):
-    duty = Duty.query.filter_by(id=duty_id).first()
+    duty = Duty.query.get_or_404(duty_id)
     return jsonify(duty.to_dict())
 
 if __name__ == '__main__':

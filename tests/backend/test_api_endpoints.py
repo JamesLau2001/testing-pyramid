@@ -143,3 +143,11 @@ class TestDutyTable:
         assert response.json["id"] == duty_id
         assert response.json["duty_name"] == "A random duty"
         assert response.json["description"] == "A random description"
+
+    def test_get_non_existent_duty_fails(self, client):
+        random_id = str(uuid.uuid4())
+        response = client.get(f"/duty/{random_id}")
+
+        assert response.status_code == 404
+
+    
