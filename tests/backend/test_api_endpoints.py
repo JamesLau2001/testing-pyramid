@@ -161,4 +161,10 @@ class TestDutyTable:
         assert response.status_code == 200
         assert response.json["duty_name"] == "A new duty"
 
+    def test_update_duty_name_fails_if_non_existent(self, client):
+        random_id = str(uuid.uuid4())
+        response = client.put(f"/duty/{random_id}")
+        
+        assert response.status_code == 404
+
     
