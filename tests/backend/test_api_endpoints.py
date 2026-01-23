@@ -114,3 +114,12 @@ class TestDutyTable:
         assert len(response.json) == 1
         assert response.json[0]["duty_name"] == "A duty"
         assert response.json[0]["description"] == "A description"
+
+    def test_create_duty(self, client):
+        duty_data = {"duty_name":"A duty", "description":"A description"}
+        response = client.post("/duty", json=duty_data)
+
+        assert response.status_code == 201
+        assert response.json["duty_name"] == "A duty"
+        assert response.json["description"] == "A description"
+        assert "id" in response.json

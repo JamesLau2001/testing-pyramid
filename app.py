@@ -107,5 +107,16 @@ def get_duties():
     duties = Duty.query.all()
     return jsonify([d.to_dict() for d in duties])
 
+@app.post('/duty')
+def create_duty():
+    data = request.get_json()
+    new_duty = Duty(duty_name=data['duty_name'], description=data['description'])
+
+    db.session.add(new_duty)
+    db.session.commit()
+
+    return jsonify(new_duty.to_dict()), 201
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)
