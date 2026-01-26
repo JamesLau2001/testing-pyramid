@@ -176,7 +176,7 @@ def create_ksb():
 
 @app.route('/ksb/<string:ksb_id>', methods=['GET'])
 def get_single_ksb(ksb_id):
-    ksb = KSB.query.filter_by(id=ksb_id).first()
+    ksb = KSB.query.get_or_404(ksb_id)
     return jsonify(ksb.to_dict())
 
 if __name__ == '__main__':

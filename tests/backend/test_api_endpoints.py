@@ -230,3 +230,9 @@ class TestKSBTable:
         assert response.json["id"] == ksb_id
         assert response.json["ksb_name"] == "Knowledge"
         assert response.json["description"] == "A random description"
+
+    def test_get_non_existent_ksb_fails(self, client):
+        random_id = str(uuid.uuid4())
+        response = client.get(f"/ksb/{random_id}")
+
+        assert response.status_code == 404
