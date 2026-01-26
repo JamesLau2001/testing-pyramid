@@ -182,4 +182,9 @@ class TestDutyTable:
         response = client.delete(f"/duty/{random_id}")
 
         assert response.status_code == 404
-    
+
+class TestKSBTable:
+    def test_ksb_table_is_empty(self, client):
+        response = client.get("/ksbs")
+        assert response.status_code == 200
+        assert response.json == []

@@ -147,5 +147,11 @@ def delete_duty(duty_id):
 
     return "Duty successfully deleted", 200
 
+
+@app.route('/ksbs', methods=['GET'])
+def get_ksbs():
+    return []
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)
