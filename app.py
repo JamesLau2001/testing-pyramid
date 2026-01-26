@@ -174,5 +174,10 @@ def create_ksb():
 
     return jsonify(new_ksb.to_dict()), 201
 
+@app.route('/ksb/<string:ksb_id>', methods=['GET'])
+def get_single_ksb(ksb_id):
+    ksb = KSB.query.filter_by(id=ksb_id).first()
+    return jsonify(ksb.to_dict())
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)
