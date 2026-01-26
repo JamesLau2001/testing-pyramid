@@ -160,6 +160,15 @@ def get_ksbs():
     ksbs = KSB.query.all()
     return jsonify([k.to_dict() for k in ksbs])
 
+@app.post('/ksb')
+def create_ksb():
+    data = request.get_json()
+    new_ksb = KSB(ksb_name=data['ksb_name'], description=data['description'])
+
+    db.session.add(new_ksb)
+    db.session.commit()
+
+    return jsonify(new_ksb.to_dict()), 201
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)

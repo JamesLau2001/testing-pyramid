@@ -201,3 +201,12 @@ class TestKSBTable:
         assert len(response.json) == 1
         assert response.json[0]["ksb_name"] == "K1"
         assert response.json[0]["description"] == "A description"
+
+    def test_create_ksb(self, client):
+        ksb_data = {"ksb_name": "K1", "description":"A description"}
+        response = client.post("/ksb", json=ksb_data)
+
+        assert response.status_code == 201
+        assert response.json["ksb_name"] == "K1"
+        assert response.json["description"] == "A description"
+        assert "id" in response.json
