@@ -61,6 +61,13 @@ class KSB(db.Model):
     ksb_name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.String(200), nullable=False, unique=True)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "ksb_name": self.ksb_name,
+            "description": self.description
+        }
+
 @app.route('/coins', methods=['GET'])
 def get_coins():
     coins = Coin.query.all()
@@ -150,7 +157,8 @@ def delete_duty(duty_id):
 
 @app.route('/ksbs', methods=['GET'])
 def get_ksbs():
-    return []
+    ksbs = KSB.query.all()
+    return jsonify([k.to_dict() for k in ksbs])
 
 
 if __name__ == '__main__':

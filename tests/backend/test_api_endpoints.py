@@ -188,3 +188,16 @@ class TestKSBTable:
         response = client.get("/ksbs")
         assert response.status_code == 200
         assert response.json == []
+
+    def test_ksb_table_returns_data(self, client):
+        with app.app_context():
+            new_ksb = KSB(ksb_name="K1", description="A description")
+            db.session.add(new_ksb)
+            db.session.commit()
+
+        response = client.get("/ksbs")
+
+        assert response.status_code == 200
+        assert len(response.json) == 1
+        assert response.json[0]["ksb_name"] == "K1"
+        assert response.json[0]["description"] == "A description"
