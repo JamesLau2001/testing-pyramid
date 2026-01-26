@@ -236,3 +236,14 @@ class TestKSBTable:
         response = client.get(f"/ksb/{random_id}")
 
         assert response.status_code == 404
+
+    def test_update_ksb_name(self, client):
+        ksb_data = {"ksb_name": "Skill", "description":"A random description"}
+        create_response = client.post("/ksb", json=ksb_data)
+        ksb_id = create_response.json["id"]
+        
+        new_ksb_data = {"ksb_name": "Behaviour"}
+        response = client.put(f"/ksb/{ksb_id}", json=new_ksb_data)
+        
+        assert response.status_code == 200
+        assert response.json["ksb_name"] == "Behaviour"

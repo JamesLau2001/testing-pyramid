@@ -179,5 +179,15 @@ def get_single_ksb(ksb_id):
     ksb = KSB.query.get_or_404(ksb_id)
     return jsonify(ksb.to_dict())
 
+@app.route('/ksb/<string:ksb_id>', methods=['PUT'])
+def update_ksb(ksb_id):
+    ksb = KSB.query.filter_by(id=ksb_id).first()
+    data = request.get_json()
+    
+    ksb.ksb_name = data['ksb_name']
+    db.session.commit()
+
+    return jsonify(ksb.to_dict())
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", debug=True, port=8080)
