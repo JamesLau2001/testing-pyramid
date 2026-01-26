@@ -181,7 +181,7 @@ def get_single_ksb(ksb_id):
 
 @app.route('/ksb/<string:ksb_id>', methods=['PUT'])
 def update_ksb(ksb_id):
-    ksb = KSB.query.filter_by(id=ksb_id).first()
+    ksb = KSB.query.get_or_404(ksb_id)
     data = request.get_json()
     
     ksb.ksb_name = data['ksb_name']

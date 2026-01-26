@@ -247,3 +247,9 @@ class TestKSBTable:
         
         assert response.status_code == 200
         assert response.json["ksb_name"] == "Behaviour"
+
+    def test_update_ksb_name_fails_if_non_existent(self, client):
+        random_id = str(uuid.uuid4())
+        response = client.put(f"/ksb/{random_id}")
+        
+        assert response.status_code == 404
