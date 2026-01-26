@@ -163,8 +163,12 @@ def get_ksbs():
 @app.post('/ksb')
 def create_ksb():
     data = request.get_json()
-    new_ksb = KSB(ksb_name=data['ksb_name'], description=data['description'])
 
+    existing_ksb = KSB.query.filter_by(ksb_name=data['ksb_name']).first()
+    if existing_ksb:
+        return jsonify({"error": "KSB already exists"}), 400
+
+    new_ksb = KSB(ksb_name=data['ksb_name'], description=data['description'])
     db.session.add(new_ksb)
     db.session.commit()
 

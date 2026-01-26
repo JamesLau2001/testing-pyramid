@@ -210,3 +210,11 @@ class TestKSBTable:
         assert response.json["ksb_name"] == "K1"
         assert response.json["description"] == "A description"
         assert "id" in response.json
+
+    def test_create_duplicate_ksb_fails(self, client):
+        ksb_data = {"ksb_name": "K1", "description":"A description"}
+        client.post("/ksb", json=ksb_data)
+        response = client.post("/ksb",  json=ksb_data)    
+
+        assert response.status_code == 400
+        assert "KSB already exists" in response.json["error"]
