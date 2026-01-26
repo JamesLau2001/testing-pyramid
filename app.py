@@ -191,7 +191,7 @@ def update_ksb(ksb_id):
 
 @app.delete('/ksb/<string:ksb_id>')
 def delete_ksb(ksb_id):
-    ksb = KSB.query.filter_by(id=ksb_id).first()
+    ksb = KSB.query.get_or_404(ksb_id)
 
     db.session.delete(ksb)
     db.session.commit()

@@ -264,3 +264,8 @@ class TestKSBTable:
         assert response.status_code == 200
         assert "KSB successfully deleted" in response.get_data(as_text=True)
 
+    def test_delete_non_existent_ksb_fails(self, client):
+        random_id = str(uuid.uuid4())
+        response = client.delete(f"/ksb/{random_id}")
+
+        assert response.status_code == 404
