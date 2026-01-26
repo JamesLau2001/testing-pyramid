@@ -253,3 +253,14 @@ class TestKSBTable:
         response = client.put(f"/ksb/{random_id}")
         
         assert response.status_code == 404
+
+    def test_delete_ksb_by_id(self, client):
+        ksb_data = {"ksb_name": "Skill diff", "description":"A random description"}
+        create_response = client.post("/ksb", json=ksb_data)
+        ksb_id = create_response.json["id"]
+        
+        response = client.delete(f"/ksb/{ksb_id}")
+        
+        assert response.status_code == 200
+        assert "KSB successfully deleted" in response.get_data(as_text=True)
+
