@@ -283,3 +283,13 @@ class TestCoinAndDuties:
 
         assert response.status_code == 201
         assert response.json["duties"][0]["duty_name"] == "A duty"
+
+    def test_cannot_create_coin_with_non_existent_duty(self, client):
+        coin_data = {
+            "coin_name": "A coin",
+            "duty_names": ["A duty"]
+        }
+        response = client.post("/coin", json=coin_data)
+
+        assert response.status_code == 404
+        assert "Duty does not exist" in response.json["error"]

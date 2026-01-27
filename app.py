@@ -87,7 +87,10 @@ def create_coin():
     if 'duty_names' in data:
         for duty_name in data['duty_names']:
             duty = Duty.query.filter_by(duty_name=duty_name).first()
-            new_coin.duties.append(duty)
+            if duty:
+                new_coin.duties.append(duty)
+            else:
+                return jsonify({"error": "Duty does not exist"}), 404
             
 
     db.session.add(new_coin)
