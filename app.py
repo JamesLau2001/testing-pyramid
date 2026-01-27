@@ -38,6 +38,7 @@ class Coin(db.Model):
         return {
             "id": self.id,
             "coin_name": self.coin_name,
+            "duties": [d.to_dict() for d in self.duties]
         }
 
 class Duty(db.Model):
@@ -82,6 +83,13 @@ def create_coin():
         return jsonify({"error": "Coin already exists"}), 400
 
     new_coin = Coin(coin_name=data['coin_name'])
+
+    if 'duty_names' in data:
+        for duty_name in data['duty_names']:
+            duty = Duty.query.filter_by(duty_name=duty_name).first()
+            new_coin.duties.append(duty)
+            
+
     db.session.add(new_coin)
     db.session.commit()
 

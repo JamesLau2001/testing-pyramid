@@ -269,3 +269,17 @@ class TestKSBTable:
         response = client.delete(f"/ksb/{random_id}")
 
         assert response.status_code == 404
+
+class TestCoinAndDuties:
+    def test_create_coin_with_existing_duty(self, client):
+        duty_data = {"duty_name": "A duty", "description": "A description"}
+        client.post("/duty", json=duty_data)
+
+        coin_data = {
+            "coin_name": "A coin",
+            "duty_names": ["A duty"]
+        }
+        response = client.post("/coin", json=coin_data)
+
+        assert response.status_code == 201
+        assert response.json["duties"][0]["duty_name"] == "A duty"
