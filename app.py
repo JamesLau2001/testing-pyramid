@@ -108,7 +108,15 @@ def update_coin(coin_id):
     coin = Coin.query.get_or_404(coin_id)
     data = request.get_json()
     
-    coin.coin_name = data['coin_name']
+    if 'coin_name' in data:
+        coin.coin_name = data['coin_name']
+    
+    if 'duty_names' in data:
+        coin.duties = [] 
+        for duty_name in data['duty_names']:
+            duty = Duty.query.filter_by(duty_name=duty_name).first()
+            coin.duties.append(duty)
+            
     db.session.commit()
 
     return jsonify(coin.to_dict())

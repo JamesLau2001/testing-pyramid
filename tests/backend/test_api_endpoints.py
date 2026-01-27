@@ -337,3 +337,28 @@ class TestCoinAndDuties:
         duty2 = response.json["duties"][1]["duty_name"]
         assert "A duty" in [duty1, duty2]
         assert "Another duty" in [duty1, duty2]
+
+    def test_update_coin_with_new_duties(self, client):
+        duty_data = {"duty_name": "A duty", "description": "A description"}
+        client.post("/duty", json=duty_data)
+
+        more_duty_data = {"duty_name": "Another duty", "description": "Another description"}
+        client.post("/duty", json=more_duty_data)
+        
+        even_more_duty_data = {"duty_name": "More duty", "description": "More description"}
+        client.post("/duty", json=even_more_duty_data)
+        
+        coin_data = {"coin_name": "A coin", "duty_names": ["A duty", "Another duty"]}
+        create_response = client.post("/coin", json=coin_data)
+        coin_id = create_response.json["id"]
+
+        new_coin_data = {
+            "duty_names": ["Another duty", "More duty"]
+        }
+        response = client.put(f"/coin/{coin_id}", json=new_coin_data)
+        
+        assert response.status_code == 200
+        duty1 = response.json["duties"][0]["duty_name"]
+        duty2 = response.json["duties"][1]["duty_name"]
+        assert "Another duty" in [duty1, duty2]
+        assert "More duty" in [duty1, duty2]
