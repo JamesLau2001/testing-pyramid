@@ -318,4 +318,22 @@ class TestCoinAndDuties:
         assert "Another duty" in [duty1, duty2]
 
         assert response.json[1]["duties"][0]["duty_name"] == "Another duty" 
-                
+        
+    def test_get_single_coin_by_id_including_duties(self, client):
+        duty_data = {"duty_name": "A duty", "description": "A description"}
+        client.post("/duty", json=duty_data)
+
+        more_duty_data = {"duty_name": "Another duty", "description": "Another description"}
+        client.post("/duty", json=more_duty_data)
+
+        coin_data = {"coin_name": "A coin", "duty_names": ["A duty", "Another duty"]}
+        create_response = client.post("/coin", json=coin_data)
+        coin_id = create_response.json["id"]
+
+        response = client.get(f"/coin/{coin_id}")
+
+        assert response.status_code == 200
+        duty1 = response.json["duties"][0]["duty_name"]
+        duty2 = response.json["duties"][1]["duty_name"]
+        assert "A duty" in [duty1, duty2]
+        assert "Another duty" in [duty1, duty2]
