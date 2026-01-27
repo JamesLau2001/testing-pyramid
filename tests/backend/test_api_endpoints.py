@@ -293,3 +293,29 @@ class TestCoinAndDuties:
 
         assert response.status_code == 404
         assert "Duty does not exist" in response.json["error"]
+
+    def test_get_multiple_coins_including_duties(self,client):
+        duty_data = {"duty_name": "A duty", "description": "A description"}
+        client.post("/duty", json=duty_data)
+
+        more_duty_data = {"duty_name": "Another duty", "description": "Another description"}
+        client.post("/duty", json=more_duty_data)
+
+        coin_data = {"coin_name": "A coin", "duty_names": ["A duty", "Another duty"]}
+        client.post("/coin", json=coin_data)
+
+        more_coin_data = {"coin_name": "Another coin", "duty_names": ["Another duty"]}
+        client.post("/coin", json=more_coin_data)
+
+        response = client.get("/coins")
+
+        assert response.status_code == 200
+        assert len(response.json) == 2
+
+        duty1 = response.json[0]["duties"][0]["duty_name"]
+        duty2 = response.json[0]["duties"][1]["duty_name"]
+        assert "A duty" in [duty1, duty2]
+        assert "Another duty" in [duty1, duty2]
+
+        assert response.json[1]["duties"][0]["duty_name"] == "Another duty" 
+                

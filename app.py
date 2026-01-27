@@ -29,7 +29,7 @@ duty_ksb = db.Table('duty_ksb',
 
 class Coin(db.Model):
     __tablename__ = "coins"
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4))
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     coin_name = db.Column(db.String(100), nullable=False, unique=True)
 
     duties = db.relationship('Duty', secondary=coin_duties, backref='coins')
@@ -43,7 +43,7 @@ class Coin(db.Model):
 
 class Duty(db.Model):
     __tablename__ = "duties"
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4))
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     duty_name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.String(200), nullable=False, unique=True)
 
@@ -58,7 +58,7 @@ class Duty(db.Model):
 
 class KSB(db.Model):
     __tablename__ = "ksbs"
-    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4))
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     ksb_name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.String(200), nullable=False, unique=True)
 
