@@ -356,9 +356,23 @@ class TestCoinAndDuties:
             "duty_names": ["Another duty", "More duty"]
         }
         response = client.put(f"/coin/{coin_id}", json=new_coin_data)
-        
+
         assert response.status_code == 200
         duty1 = response.json["duties"][0]["duty_name"]
         duty2 = response.json["duties"][1]["duty_name"]
         assert "Another duty" in [duty1, duty2]
         assert "More duty" in [duty1, duty2]
+
+    def test_cannot_create_coin_with_non_existent_duty(self, client):
+        coin_data = {"coin_name": "A coin"}
+        create_response = client.post("/coin", json=coin_data)
+        coin_id = create_response.json["id"]
+
+        new_coin_data = {
+            "duty_names": ["Another duty", "More duty"]
+        }
+
+        response = client.put(f"/coin/{coin_id}", json=new_coin_data)
+
+        assert response.status_code == 404
+        assert "Duty does not exist" in response.json["error"]

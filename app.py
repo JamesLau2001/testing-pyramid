@@ -115,7 +115,10 @@ def update_coin(coin_id):
         coin.duties = [] 
         for duty_name in data['duty_names']:
             duty = Duty.query.filter_by(duty_name=duty_name).first()
-            coin.duties.append(duty)
+            if duty:
+                coin.duties.append(duty)
+            else:
+                return jsonify({"error": "Duty does not exist"}), 404
             
     db.session.commit()
 
