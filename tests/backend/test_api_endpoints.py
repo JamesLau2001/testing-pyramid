@@ -277,7 +277,7 @@ class TestCoinAndDuties:
 
         coin_data = {
             "coin_name": "A coin",
-            "duty_names": ["A duty"]
+            "duties": ["A duty"]
         }
         response = client.post("/coin", json=coin_data)
 
@@ -287,7 +287,7 @@ class TestCoinAndDuties:
     def test_cannot_create_coin_with_non_existent_duty(self, client):
         coin_data = {
             "coin_name": "A coin",
-            "duty_names": ["A duty"]
+            "duties": ["A duty"]
         }
         response = client.post("/coin", json=coin_data)
 
@@ -301,10 +301,10 @@ class TestCoinAndDuties:
         more_duty_data = {"duty_name": "Another duty", "description": "Another description"}
         client.post("/duty", json=more_duty_data)
 
-        coin_data = {"coin_name": "A coin", "duty_names": ["A duty", "Another duty"]}
+        coin_data = {"coin_name": "A coin", "duties": ["A duty", "Another duty"]}
         client.post("/coin", json=coin_data)
 
-        more_coin_data = {"coin_name": "Another coin", "duty_names": ["Another duty"]}
+        more_coin_data = {"coin_name": "Another coin", "duties": ["Another duty"]}
         client.post("/coin", json=more_coin_data)
 
         response = client.get("/coins")
@@ -326,7 +326,7 @@ class TestCoinAndDuties:
         more_duty_data = {"duty_name": "Another duty", "description": "Another description"}
         client.post("/duty", json=more_duty_data)
 
-        coin_data = {"coin_name": "A coin", "duty_names": ["A duty", "Another duty"]}
+        coin_data = {"coin_name": "A coin", "duties": ["A duty", "Another duty"]}
         create_response = client.post("/coin", json=coin_data)
         coin_id = create_response.json["id"]
 
@@ -348,12 +348,12 @@ class TestCoinAndDuties:
         even_more_duty_data = {"duty_name": "More duty", "description": "More description"}
         client.post("/duty", json=even_more_duty_data)
         
-        coin_data = {"coin_name": "A coin", "duty_names": ["A duty", "Another duty"]}
+        coin_data = {"coin_name": "A coin", "duties": ["A duty", "Another duty"]}
         create_response = client.post("/coin", json=coin_data)
         coin_id = create_response.json["id"]
 
         new_coin_data = {
-            "duty_names": ["Another duty", "More duty"]
+            "duties": ["Another duty", "More duty"]
         }
         response = client.put(f"/coin/{coin_id}", json=new_coin_data)
 
@@ -369,7 +369,7 @@ class TestCoinAndDuties:
         coin_id = create_response.json["id"]
 
         new_coin_data = {
-            "duty_names": ["Another duty", "More duty"]
+            "duties": ["Another duty", "More duty"]
         }
 
         response = client.put(f"/coin/{coin_id}", json=new_coin_data)
@@ -385,7 +385,7 @@ class TestDutiesAndKSBs:
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
-            "ksb_names": ["K1"]
+            "ksbs": ["K1"]
         }
         response = client.post("/duty", json=duty_data)
 
@@ -396,7 +396,7 @@ class TestDutiesAndKSBs:
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
-            "ksb_names": ["K1"]
+            "ksbs": ["K1"]
         }
         response = client.post("/duty", json=duty_data)
 
@@ -413,14 +413,14 @@ class TestDutiesAndKSBs:
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
-            "ksb_names": ["K1", "B1"]
+            "ksbs": ["K1", "B1"]
         }
         client.post("/duty", json=duty_data)
 
         more_duty_data = {
             "duty_name": "Another duty",
             "description": "Another description",
-            "ksb_names": ["K1"]
+            "ksbs": ["K1"]
         }
         client.post("/duty", json=more_duty_data)
 
@@ -447,7 +447,7 @@ class TestDutiesAndKSBs:
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
-            "ksb_names": ["K1", "B1"]
+            "ksbs": ["K1", "B1"]
         }
         create_response = client.post("/duty", json=duty_data)
         duty_id = create_response.json["id"]
@@ -473,13 +473,13 @@ class TestDutiesAndKSBs:
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
-            "ksb_names": ["K1", "B1"]
+            "ksbs": ["K1", "B1"]
         }
         create_response = client.post("/duty", json=duty_data)
         duty_id = create_response.json["id"]
 
         new_ksb_data = {
-            "ksb_names": ["K1", "S1"]
+            "ksbs": ["K1", "S1"]
         }
         response = client.put(f"/duty/{duty_id}", json=new_ksb_data)
 
@@ -498,7 +498,7 @@ class TestDutiesAndKSBs:
         duty_id = create_response.json["id"]
 
         new_ksb_data = {
-            "ksb_names": ["K1", "S1"]
+            "ksbs": ["K1", "S1"]
         }
         response = client.put(f"/duty/{duty_id}", json=new_ksb_data)
 

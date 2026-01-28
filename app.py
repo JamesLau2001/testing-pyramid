@@ -85,8 +85,8 @@ def create_coin():
 
     new_coin = Coin(coin_name=data['coin_name'])
 
-    if 'duty_names' in data:
-        for duty_name in data['duty_names']:
+    if 'duties' in data:
+        for duty_name in data['duties']:
             duty = Duty.query.filter_by(duty_name=duty_name).first()
             if duty:
                 new_coin.duties.append(duty)
@@ -112,9 +112,9 @@ def update_coin(coin_id):
     if 'coin_name' in data:
         coin.coin_name = data['coin_name']
     
-    if 'duty_names' in data:
+    if 'duties' in data:
         coin.duties = [] 
-        for duty_name in data['duty_names']:
+        for duty_name in data['duties']:
             duty = Duty.query.filter_by(duty_name=duty_name).first()
             if duty:
                 coin.duties.append(duty)
@@ -147,8 +147,8 @@ def create_duty():
     
     new_duty = Duty(duty_name=data['duty_name'], description=data['description'])
     
-    if 'ksb_names' in data:
-        for ksb_name in data['ksb_names']:
+    if 'ksbs' in data:
+        for ksb_name in data['ksbs']:
             ksb = KSB.query.filter_by(ksb_name=ksb_name).first()
             if ksb:
                 new_duty.ksbs.append(ksb)
@@ -173,9 +173,9 @@ def update_duty(duty_id):
     if 'duty_name' in data:
         duty.duty_name = data['duty_name']
 
-    if 'ksb_names' in data:
+    if 'ksbs' in data:
         duty.ksbs = [] 
-        for ksb_name in data['ksb_names']:
+        for ksb_name in data['ksbs']:
             ksb = KSB.query.filter_by(ksb_name=ksb_name).first()
             if ksb:
                 duty.ksbs.append(ksb)
