@@ -402,3 +402,38 @@ class TestDutiesAndKSBs:
 
         assert response.status_code == 404
         assert "KSB does not exist" in response.json["error"]
+    
+    def test_get_multiple_duties_including_ksbs(self,client):
+        ksb_data = {"ksb_name": "K1", "description":"A description"}
+        client.post("/ksb", json=ksb_data)
+
+        more_ksb_data = {"ksb_name": "B1", "description":"Another description"}
+        client.post("/ksb", json=more_ksb_data)
+
+        duty_data = {
+            "duty_name": "A duty",
+            "description": "A description",
+            "ksb_names": ["K1", "B1"]
+        }
+        client.post("/duty", json=duty_data)
+
+        more_duty_data = {
+            "duty_name": "Another duty",
+            "description": "Another description",
+            "ksb_names": ["K1"]
+        }
+        client.post("/duty", json=more_duty_data)
+
+
+        response = client.get("/duties")
+
+        assert response.status_code == 200
+        assert len(response.json) == 2
+
+        duty1 = response.json[0]["ksbs"][0]["ksb_name"]
+        duty2 = response.json[0]["ksbs"][1]["ksb_name"]
+        assert "K1" in [duty1, duty2]
+        assert "B1" in [duty1, duty2]
+
+        assert response.json[1]["ksbs"][0]["ksb_name"] == "K1" 
+        
