@@ -391,3 +391,14 @@ class TestDutiesAndKSBs:
 
         assert response.status_code == 201
         assert response.json["ksbs"][0]["ksb_name"] == "K1"
+    
+    def test_cannot_create_duty_with_non_existent_ksb(self, client):
+        duty_data = {
+            "duty_name": "A duty",
+            "description": "A description",
+            "ksb_names": ["K1"]
+        }
+        response = client.post("/duty", json=duty_data)
+
+        assert response.status_code == 404
+        assert "KSB does not exist" in response.json["error"]

@@ -150,8 +150,11 @@ def create_duty():
     if 'ksb_names' in data:
         for ksb_name in data['ksb_names']:
             ksb = KSB.query.filter_by(ksb_name=ksb_name).first()
-            new_duty.ksbs.append(ksb)
-            
+            if ksb:
+                new_duty.ksbs.append(ksb)
+            else:
+                return jsonify({"error": "KSB does not exist"}), 404
+
     db.session.add(new_duty)
     db.session.commit()
 
