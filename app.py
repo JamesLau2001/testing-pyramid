@@ -53,7 +53,8 @@ class Duty(db.Model):
         return {
             "id": self.id,
             "duty_name": self.duty_name,
-            "description": self.description
+            "description": self.description,
+            "ksbs": [k.to_dict() for k in self.ksbs]
         }
 
 class KSB(db.Model):
@@ -145,7 +146,12 @@ def create_duty():
         return jsonify({"error": "Duty already exists"}), 400
     
     new_duty = Duty(duty_name=data['duty_name'], description=data['description'])
-
+    
+    if 'ksb_names' in data:
+        for ksb_name in data['ksb_names']:
+            ksb = KSB.query.filter_by(ksb_name=ksb_name).first()
+            new_duty.ksbs.append(ksb)
+            
     db.session.add(new_duty)
     db.session.commit()
 
