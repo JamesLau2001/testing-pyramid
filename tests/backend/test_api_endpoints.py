@@ -363,7 +363,7 @@ class TestCoinAndDuties:
         assert "Another duty" in [duty1, duty2]
         assert "More duty" in [duty1, duty2]
 
-    def test_cannot_create_coin_with_non_existent_duty(self, client):
+    def test_update_create_coin_with_non_existent_duty(self, client):
         coin_data = {"coin_name": "A coin"}
         create_response = client.post("/coin", json=coin_data)
         coin_id = create_response.json["id"]
@@ -488,4 +488,20 @@ class TestDutiesAndKSBs:
         ksb2 = response.json["ksbs"][1]["ksb_name"]
         assert "K1" in [ksb1, ksb2]
         assert "S1" in [ksb1, ksb2]
+
+    def test_update_create_duty_with_non_existent_ksb(self, client):
+        duty_data = {
+            "duty_name": "A duty",
+            "description": "A description",
+        }
+        create_response = client.post("/duty", json=duty_data)
+        duty_id = create_response.json["id"]
+
+        new_ksb_data = {
+            "ksb_names": ["K1", "S1"]
+        }
+        response = client.put(f"/duty/{duty_id}", json=new_ksb_data)
+
+        assert response.status_code == 404
+        assert "KSB does not exist" in response.json["error"]
         

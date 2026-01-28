@@ -177,8 +177,10 @@ def update_duty(duty_id):
         duty.ksbs = [] 
         for ksb_name in data['ksb_names']:
             ksb = KSB.query.filter_by(ksb_name=ksb_name).first()
-            duty.ksbs.append(ksb)
-
+            if ksb:
+                duty.ksbs.append(ksb)
+            else:
+                return jsonify({"error": "KSB does not exist"}), 404
 
     db.session.commit()
 
