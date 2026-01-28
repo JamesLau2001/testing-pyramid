@@ -168,10 +168,18 @@ def get_single_duty(duty_id):
 @app.route('/duty/<string:duty_id>', methods=['PUT'])
 def update_duty(duty_id):
     duty = Duty.query.get_or_404(duty_id)
-
     data = request.get_json()
     
-    duty.duty_name = data['duty_name']
+    if 'duty_name' in data:
+        duty.duty_name = data['duty_name']
+
+    if 'ksb_names' in data:
+        duty.ksbs = [] 
+        for ksb_name in data['ksb_names']:
+            ksb = KSB.query.filter_by(ksb_name=ksb_name).first()
+            duty.ksbs.append(ksb)
+
+
     db.session.commit()
 
     return jsonify(duty.to_dict())

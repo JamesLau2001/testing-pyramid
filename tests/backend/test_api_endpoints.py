@@ -459,4 +459,33 @@ class TestDutiesAndKSBs:
         ksb2 = response.json["ksbs"][1]["ksb_name"]
         assert "K1" in [ksb1, ksb2]
         assert "B1" in [ksb1, ksb2]
+
+    def test_update_duty_with_new_ksbs(self, client):
+        ksb_data = {"ksb_name": "K1", "description":"A description"}
+        client.post("/ksb", json=ksb_data)
+
+        more_ksb_data = {"ksb_name": "B1", "description":"Another description"}
+        client.post("/ksb", json=more_ksb_data)
+        
+        even_more_ksb_data = {"ksb_name": "S1", "description":"More description"}
+        client.post("/ksb", json=even_more_ksb_data)
+        
+        duty_data = {
+            "duty_name": "A duty",
+            "description": "A description",
+            "ksb_names": ["K1", "B1"]
+        }
+        create_response = client.post("/duty", json=duty_data)
+        duty_id = create_response.json["id"]
+
+        new_ksb_data = {
+            "ksb_names": ["K1", "S1"]
+        }
+        response = client.put(f"/duty/{duty_id}", json=new_ksb_data)
+
+        assert response.status_code == 200
+        ksb1 = response.json["ksbs"][0]["ksb_name"]
+        ksb2 = response.json["ksbs"][1]["ksb_name"]
+        assert "K1" in [ksb1, ksb2]
+        assert "S1" in [ksb1, ksb2]
         
