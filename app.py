@@ -11,6 +11,7 @@ app = Flask(__name__)
 if not app.config.get("SQLALCHEMY_DATABASE_URI"):
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URL")
 
+duties= []
 
 db = SQLAlchemy(app)
 
@@ -66,6 +67,23 @@ class KSB(db.Model):
             "ksb_name": self.ksb_name,
             "description": self.description
         }
+
+duties = []
+
+@app.route('/')
+def index():
+    return render_template("automate_duty.html", duties=duties)
+
+@app.route('/create-duties', methods=['POST'])
+def create_duties():
+    number = request.form['number']
+    description = request.form['description']
+    ksbs = request.form['ksbs']
+
+    duty = AutomateDutyController.create_duties(number, description, ksbs)
+    duties.append(duty)
+
+    return redirect(url_for('index'))
 
 @app.route('/coins', methods=['GET'])
 def get_coins():
