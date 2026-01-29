@@ -38,7 +38,7 @@ class TestCoinTable:
 
     def test_create_coin(self, client):
         coin_data = {"coin_name": "Test Coin Data"}
-        response = client.post("/coin", json=coin_data)
+        response = client.post("/coins", json=coin_data)
 
         assert response.status_code == 201
         assert response.json["coin_name"] == "Test Coin Data"
@@ -46,18 +46,18 @@ class TestCoinTable:
     
     def test_create_duplicate_coin_fails(self, client):
         coin_data = {"coin_name": "Test Coin Data"}
-        client.post("/coin", json=coin_data)
-        response = client.post("/coin",  json=coin_data)    
+        client.post("/coins", json=coin_data)
+        response = client.post("/coins",  json=coin_data)    
 
         assert response.status_code == 400
         assert "Coin already exists" in response.json["error"]
 
     def test_get_single_coin(self, client):
         coin_data = {"coin_name": "Software Developer's Coin Data"}
-        create_response =client.post("/coin", json=coin_data)
+        create_response =client.post("/coins", json=coin_data)
         coin_id = create_response.json["id"]
 
-        response = client.get(f"/coin/{coin_id}")
+        response = client.get(f"/coins/{coin_id}")
 
         assert response.status_code == 200
         assert response.json["id"] == coin_id
@@ -65,34 +65,34 @@ class TestCoinTable:
 
     def test_get_non_existent_coin_fails(self, client):
         random_id = str(uuid.uuid4())
-        response = client.get(f"/coin/{random_id}")
+        response = client.get(f"/coins/{random_id}")
 
         assert response.status_code == 404
     
     def test_update_coin_name(self, client):
         coin_data = {"coin_name": "A illegitimate random coin"}
-        create_response =client.post("/coin", json=coin_data)
+        create_response =client.post("/coins", json=coin_data)
         coin_id = create_response.json["id"]
         
         new_coin_data = {"coin_name": "A legitimate random coin"}
-        response = client.put(f"/coin/{coin_id}", json=new_coin_data)
+        response = client.put(f"/coins/{coin_id}", json=new_coin_data)
         
         assert response.status_code == 200
         assert response.json["coin_name"] == "A legitimate random coin"
     
     def test_delete_coin(self, client):
         coin_data = {"coin_name": "Nice coin"}
-        create_response =client.post("/coin", json=coin_data)
+        create_response =client.post("/coins", json=coin_data)
         coin_id = create_response.json["id"]
         
-        response = client.delete(f"/coin/{coin_id}")
+        response = client.delete(f"/coins/{coin_id}")
         
         assert response.status_code == 200
         assert "Coin successfully deleted" in response.get_data(as_text=True)
 
     def test_delete_non_existent_coin_fails(self, client):
         random_id = str(uuid.uuid4())
-        response = client.delete(f"/coin/{random_id}")
+        response = client.delete(f"/coins/{random_id}")
 
         assert response.status_code == 404
 
@@ -117,7 +117,7 @@ class TestDutyTable:
 
     def test_create_duty(self, client):
         duty_data = {"duty_name":"A duty", "description":"A description"}
-        response = client.post("/duty", json=duty_data)
+        response = client.post("/duties", json=duty_data)
 
         assert response.status_code == 201
         assert response.json["duty_name"] == "A duty"
@@ -126,18 +126,18 @@ class TestDutyTable:
 
     def test_create_duplicate_duty_fails(self, client):
         duty_data = {"duty_name":"A duty", "description":"A description"}
-        client.post("/duty", json=duty_data)
-        response = client.post("/duty",  json=duty_data)    
+        client.post("/duties", json=duty_data)
+        response = client.post("/duties",  json=duty_data)    
 
         assert response.status_code == 400
         assert "Duty already exists" in response.json["error"]
 
     def test_get_duty_by_id(self, client):
         duty_data = {"duty_name":"A random duty", "description":"A random description"}
-        create_response = client.post("/duty", json=duty_data)
+        create_response = client.post("/duties", json=duty_data)
         duty_id = create_response.json["id"]
 
-        response = client.get(f"/duty/{duty_id}")
+        response = client.get(f"/duties/{duty_id}")
 
         assert response.status_code == 200
         assert response.json["id"] == duty_id
@@ -146,40 +146,40 @@ class TestDutyTable:
 
     def test_get_non_existent_duty_fails(self, client):
         random_id = str(uuid.uuid4())
-        response = client.get(f"/duty/{random_id}")
+        response = client.get(f"/duties/{random_id}")
 
         assert response.status_code == 404
 
     def test_update_duty_name(self, client):
         duty_data = {"duty_name":"A duty", "description":"A description"}
-        create_response = client.post("/duty", json=duty_data)
+        create_response = client.post("/duties", json=duty_data)
         duty_id = create_response.json["id"]
         
         new_duty_data = {"duty_name": "A new duty"}
-        response = client.put(f"/duty/{duty_id}", json=new_duty_data)
+        response = client.put(f"/duties/{duty_id}", json=new_duty_data)
         
         assert response.status_code == 200
         assert response.json["duty_name"] == "A new duty"
 
     def test_update_duty_name_fails_if_non_existent(self, client):
         random_id = str(uuid.uuid4())
-        response = client.put(f"/duty/{random_id}")
+        response = client.put(f"/duties/{random_id}")
         
         assert response.status_code == 404
 
     def test_delete_duty_by_id(self, client):
         duty_data = {"duty_name":"A nice duty", "description":"A nice description"}
-        create_response = client.post("/duty", json=duty_data)
+        create_response = client.post("/duties", json=duty_data)
         duty_id = create_response.json["id"]
         
-        response = client.delete(f"/duty/{duty_id}")
+        response = client.delete(f"/duties/{duty_id}")
         
         assert response.status_code == 200
         assert "Duty successfully deleted" in response.get_data(as_text=True)
 
     def test_delete_non_existent_duty_fails(self, client):
         random_id = str(uuid.uuid4())
-        response = client.delete(f"/duty/{random_id}")
+        response = client.delete(f"/duties/{random_id}")
 
         assert response.status_code == 404
 
@@ -204,7 +204,7 @@ class TestKSBTable:
 
     def test_create_ksb(self, client):
         ksb_data = {"ksb_name": "K1", "description":"A description"}
-        response = client.post("/ksb", json=ksb_data)
+        response = client.post("/ksbs", json=ksb_data)
 
         assert response.status_code == 201
         assert response.json["ksb_name"] == "K1"
@@ -213,18 +213,18 @@ class TestKSBTable:
 
     def test_create_duplicate_ksb_fails(self, client):
         ksb_data = {"ksb_name": "K1", "description":"A description"}
-        client.post("/ksb", json=ksb_data)
-        response = client.post("/ksb",  json=ksb_data)    
+        client.post("/ksbs", json=ksb_data)
+        response = client.post("/ksbs",  json=ksb_data)    
 
         assert response.status_code == 400
         assert "KSB already exists" in response.json["error"]
 
     def test_get_ksb_by_id(self, client):
         ksb_data = {"ksb_name": "Knowledge", "description":"A random description"}
-        create_response = client.post("/ksb", json=ksb_data)
+        create_response = client.post("/ksbs", json=ksb_data)
         ksb_id = create_response.json["id"]
 
-        response = client.get(f"/ksb/{ksb_id}")
+        response = client.get(f"/ksbs/{ksb_id}")
 
         assert response.status_code == 200
         assert response.json["id"] == ksb_id
@@ -233,17 +233,17 @@ class TestKSBTable:
 
     def test_get_non_existent_ksb_fails(self, client):
         random_id = str(uuid.uuid4())
-        response = client.get(f"/ksb/{random_id}")
+        response = client.get(f"/ksbs/{random_id}")
 
         assert response.status_code == 404
 
     def test_update_ksb_name(self, client):
         ksb_data = {"ksb_name": "Skill", "description":"A random description"}
-        create_response = client.post("/ksb", json=ksb_data)
+        create_response = client.post("/ksbs", json=ksb_data)
         ksb_id = create_response.json["id"]
         
         new_ksb_data = {"ksb_name": "Behaviour"}
-        response = client.put(f"/ksb/{ksb_id}", json=new_ksb_data)
+        response = client.put(f"/ksbs/{ksb_id}", json=new_ksb_data)
         
         assert response.status_code == 200
         assert response.json["ksb_name"] == "Behaviour"
@@ -256,30 +256,30 @@ class TestKSBTable:
 
     def test_delete_ksb_by_id(self, client):
         ksb_data = {"ksb_name": "Skill diff", "description":"A random description"}
-        create_response = client.post("/ksb", json=ksb_data)
+        create_response = client.post("/ksbs", json=ksb_data)
         ksb_id = create_response.json["id"]
         
-        response = client.delete(f"/ksb/{ksb_id}")
+        response = client.delete(f"/ksbs/{ksb_id}")
         
         assert response.status_code == 200
         assert "KSB successfully deleted" in response.get_data(as_text=True)
 
     def test_delete_non_existent_ksb_fails(self, client):
         random_id = str(uuid.uuid4())
-        response = client.delete(f"/ksb/{random_id}")
+        response = client.delete(f"/ksbs/{random_id}")
 
         assert response.status_code == 404
 
 class TestCoinAndDuties:
     def test_create_coin_with_existing_duty(self, client):
         duty_data = {"duty_name": "A duty", "description": "A description"}
-        client.post("/duty", json=duty_data)
+        client.post("/duties", json=duty_data)
 
         coin_data = {
             "coin_name": "A coin",
             "duties": ["A duty"]
         }
-        response = client.post("/coin", json=coin_data)
+        response = client.post("/coins", json=coin_data)
 
         assert response.status_code == 201
         assert response.json["duties"][0]["duty_name"] == "A duty"
@@ -289,23 +289,23 @@ class TestCoinAndDuties:
             "coin_name": "A coin",
             "duties": ["A duty"]
         }
-        response = client.post("/coin", json=coin_data)
+        response = client.post("/coins", json=coin_data)
 
         assert response.status_code == 404
         assert "Duty does not exist" in response.json["error"]
 
     def test_get_multiple_coins_including_duties(self,client):
         duty_data = {"duty_name": "A duty", "description": "A description"}
-        client.post("/duty", json=duty_data)
+        client.post("/duties", json=duty_data)
 
         more_duty_data = {"duty_name": "Another duty", "description": "Another description"}
-        client.post("/duty", json=more_duty_data)
+        client.post("/duties", json=more_duty_data)
 
         coin_data = {"coin_name": "A coin", "duties": ["A duty", "Another duty"]}
-        client.post("/coin", json=coin_data)
+        client.post("/coins", json=coin_data)
 
         more_coin_data = {"coin_name": "Another coin", "duties": ["Another duty"]}
-        client.post("/coin", json=more_coin_data)
+        client.post("/coins", json=more_coin_data)
 
         response = client.get("/coins")
 
@@ -321,16 +321,16 @@ class TestCoinAndDuties:
         
     def test_get_single_coin_by_id_including_duties(self, client):
         duty_data = {"duty_name": "A duty", "description": "A description"}
-        client.post("/duty", json=duty_data)
+        client.post("/duties", json=duty_data)
 
         more_duty_data = {"duty_name": "Another duty", "description": "Another description"}
-        client.post("/duty", json=more_duty_data)
+        client.post("/duties", json=more_duty_data)
 
         coin_data = {"coin_name": "A coin", "duties": ["A duty", "Another duty"]}
-        create_response = client.post("/coin", json=coin_data)
+        create_response = client.post("/coins", json=coin_data)
         coin_id = create_response.json["id"]
 
-        response = client.get(f"/coin/{coin_id}")
+        response = client.get(f"/coins/{coin_id}")
 
         assert response.status_code == 200
         duty1 = response.json["duties"][0]["duty_name"]
@@ -340,22 +340,22 @@ class TestCoinAndDuties:
 
     def test_update_coin_with_new_duties(self, client):
         duty_data = {"duty_name": "A duty", "description": "A description"}
-        client.post("/duty", json=duty_data)
+        client.post("/duties", json=duty_data)
 
         more_duty_data = {"duty_name": "Another duty", "description": "Another description"}
-        client.post("/duty", json=more_duty_data)
+        client.post("/duties", json=more_duty_data)
         
         even_more_duty_data = {"duty_name": "More duty", "description": "More description"}
-        client.post("/duty", json=even_more_duty_data)
+        client.post("/duties", json=even_more_duty_data)
         
         coin_data = {"coin_name": "A coin", "duties": ["A duty", "Another duty"]}
-        create_response = client.post("/coin", json=coin_data)
+        create_response = client.post("/coins", json=coin_data)
         coin_id = create_response.json["id"]
 
         new_coin_data = {
             "duties": ["Another duty", "More duty"]
         }
-        response = client.put(f"/coin/{coin_id}", json=new_coin_data)
+        response = client.put(f"/coins/{coin_id}", json=new_coin_data)
 
         assert response.status_code == 200
         duty1 = response.json["duties"][0]["duty_name"]
@@ -365,14 +365,14 @@ class TestCoinAndDuties:
 
     def test_update_create_coin_with_non_existent_duty(self, client):
         coin_data = {"coin_name": "A coin"}
-        create_response = client.post("/coin", json=coin_data)
+        create_response = client.post("/coins", json=coin_data)
         coin_id = create_response.json["id"]
 
         new_coin_data = {
             "duties": ["Another duty", "More duty"]
         }
 
-        response = client.put(f"/coin/{coin_id}", json=new_coin_data)
+        response = client.put(f"/coins/{coin_id}", json=new_coin_data)
 
         assert response.status_code == 404
         assert "Duty does not exist" in response.json["error"]
@@ -380,14 +380,14 @@ class TestCoinAndDuties:
 class TestDutiesAndKSBs:
     def test_create_duty_with_existing_ksb(self, client):
         ksb_data = {"ksb_name": "K1", "description":"A description"}
-        client.post("/ksb", json=ksb_data)
+        client.post("/ksbs", json=ksb_data)
 
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
             "ksbs": ["K1"]
         }
-        response = client.post("/duty", json=duty_data)
+        response = client.post("/duties", json=duty_data)
 
         assert response.status_code == 201
         assert response.json["ksbs"][0]["ksb_name"] == "K1"
@@ -398,31 +398,31 @@ class TestDutiesAndKSBs:
             "description": "A description",
             "ksbs": ["K1"]
         }
-        response = client.post("/duty", json=duty_data)
+        response = client.post("/duties", json=duty_data)
 
         assert response.status_code == 404
         assert "KSB does not exist" in response.json["error"]
     
     def test_get_multiple_duties_including_ksbs(self,client):
         ksb_data = {"ksb_name": "K1", "description":"A description"}
-        client.post("/ksb", json=ksb_data)
+        client.post("/ksbs", json=ksb_data)
 
         more_ksb_data = {"ksb_name": "B1", "description":"Another description"}
-        client.post("/ksb", json=more_ksb_data)
+        client.post("/ksbs", json=more_ksb_data)
 
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
             "ksbs": ["K1", "B1"]
         }
-        client.post("/duty", json=duty_data)
+        client.post("/duties", json=duty_data)
 
         more_duty_data = {
             "duty_name": "Another duty",
             "description": "Another description",
             "ksbs": ["K1"]
         }
-        client.post("/duty", json=more_duty_data)
+        client.post("/duties", json=more_duty_data)
 
 
         response = client.get("/duties")
@@ -439,20 +439,20 @@ class TestDutiesAndKSBs:
     
     def test_get_single_duty_by_id_including_ksbs(self, client):
         ksb_data = {"ksb_name": "K1", "description":"A description"}
-        client.post("/ksb", json=ksb_data)
+        client.post("/ksbs", json=ksb_data)
 
         more_ksb_data = {"ksb_name": "B1", "description":"Another description"}
-        client.post("/ksb", json=more_ksb_data)
+        client.post("/ksbs", json=more_ksb_data)
 
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
             "ksbs": ["K1", "B1"]
         }
-        create_response = client.post("/duty", json=duty_data)
+        create_response = client.post("/duties", json=duty_data)
         duty_id = create_response.json["id"]
 
-        response = client.get(f"/duty/{duty_id}")
+        response = client.get(f"/duties/{duty_id}")
 
         assert response.status_code == 200
         ksb1 = response.json["ksbs"][0]["ksb_name"]
@@ -462,26 +462,26 @@ class TestDutiesAndKSBs:
 
     def test_update_duty_with_new_ksbs(self, client):
         ksb_data = {"ksb_name": "K1", "description":"A description"}
-        client.post("/ksb", json=ksb_data)
+        client.post("/ksbs", json=ksb_data)
 
         more_ksb_data = {"ksb_name": "B1", "description":"Another description"}
-        client.post("/ksb", json=more_ksb_data)
+        client.post("/ksbs", json=more_ksb_data)
         
         even_more_ksb_data = {"ksb_name": "S1", "description":"More description"}
-        client.post("/ksb", json=even_more_ksb_data)
+        client.post("/ksbs", json=even_more_ksb_data)
         
         duty_data = {
             "duty_name": "A duty",
             "description": "A description",
             "ksbs": ["K1", "B1"]
         }
-        create_response = client.post("/duty", json=duty_data)
+        create_response = client.post("/duties", json=duty_data)
         duty_id = create_response.json["id"]
 
         new_ksb_data = {
             "ksbs": ["K1", "S1"]
         }
-        response = client.put(f"/duty/{duty_id}", json=new_ksb_data)
+        response = client.put(f"/duties/{duty_id}", json=new_ksb_data)
 
         assert response.status_code == 200
         ksb1 = response.json["ksbs"][0]["ksb_name"]
@@ -494,13 +494,13 @@ class TestDutiesAndKSBs:
             "duty_name": "A duty",
             "description": "A description",
         }
-        create_response = client.post("/duty", json=duty_data)
+        create_response = client.post("/duties", json=duty_data)
         duty_id = create_response.json["id"]
 
         new_ksb_data = {
             "ksbs": ["K1", "S1"]
         }
-        response = client.put(f"/duty/{duty_id}", json=new_ksb_data)
+        response = client.put(f"/duties/{duty_id}", json=new_ksb_data)
 
         assert response.status_code == 404
         assert "KSB does not exist" in response.json["error"]

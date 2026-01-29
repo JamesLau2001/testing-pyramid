@@ -29,6 +29,12 @@ runcmd:
   - systemctl start docker
   - systemctl enable docker
   - git clone https://github.com/JamesLau2001/testing-pyramid.git /home/ubuntu/testing-pyramid
+  - |
+    cat > /home/ubuntu/API_task/.env << 'EOF'
+    DB_URL='${DB_URL}'
+    EOF
+  - chmod 600 /home/ubuntu/API_task/.env
+  - chown ubuntu:ubuntu /home/ubuntu/API_task/.env
   - docker build -t testing-pyramid:latest /home/ubuntu/testing-pyramid
   - docker stop testing-pyramid || true
   - docker rm testing-pyramid || true

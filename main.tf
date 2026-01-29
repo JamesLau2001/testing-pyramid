@@ -11,6 +11,12 @@ data "aws_ami" "ubuntu" {
     owners = ["099720109477"]
 }
 
+variable "DB_URL" {
+    description = "database url"
+    type = string
+    sensitive = true
+}
+
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096

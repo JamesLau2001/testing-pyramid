@@ -90,7 +90,7 @@ def get_coins():
     coins = Coin.query.all()
     return jsonify([c.to_dict() for c in coins])
 
-@app.post('/coin')
+@app.post('/coins')
 def create_coin():
     data = request.get_json()
     
@@ -114,12 +114,12 @@ def create_coin():
 
     return jsonify(new_coin.to_dict()), 201
 
-@app.route('/coin/<string:coin_id>', methods=['GET'])
+@app.route('/coins/<string:coin_id>', methods=['GET'])
 def get_single_coin(coin_id):
     coin = Coin.query.get_or_404(coin_id)
     return jsonify(coin.to_dict())
 
-@app.route('/coin/<string:coin_id>', methods=['PUT'])
+@app.route('/coins/<string:coin_id>', methods=['PUT'])
 def update_coin(coin_id):
     coin = Coin.query.get_or_404(coin_id)
     data = request.get_json()
@@ -140,7 +140,7 @@ def update_coin(coin_id):
 
     return jsonify(coin.to_dict())
 
-@app.delete('/coin/<string:coin_id>')
+@app.delete('/coins/<string:coin_id>')
 def delete_coin(coin_id):
     coin = Coin.query.get_or_404(coin_id)
     db.session.delete(coin)
@@ -152,7 +152,7 @@ def get_duties():
     duties = Duty.query.all()
     return jsonify([d.to_dict() for d in duties])
 
-@app.post('/duty')
+@app.post('/duties')
 def create_duty():
     data = request.get_json()
 
@@ -175,12 +175,12 @@ def create_duty():
 
     return jsonify(new_duty.to_dict()), 201
 
-@app.route('/duty/<string:duty_id>', methods=['GET'])
+@app.route('/duties/<string:duty_id>', methods=['GET'])
 def get_single_duty(duty_id):
     duty = Duty.query.get_or_404(duty_id)
     return jsonify(duty.to_dict())
 
-@app.route('/duty/<string:duty_id>', methods=['PUT'])
+@app.route('/duties/<string:duty_id>', methods=['PUT'])
 def update_duty(duty_id):
     duty = Duty.query.get_or_404(duty_id)
     data = request.get_json()
@@ -201,7 +201,7 @@ def update_duty(duty_id):
 
     return jsonify(duty.to_dict())
 
-@app.delete('/duty/<string:duty_id>')
+@app.delete('/duties/<string:duty_id>')
 def delete_duty(duty_id):
     duty = Duty.query.get_or_404(duty_id)
 
@@ -216,7 +216,7 @@ def get_ksbs():
     ksbs = KSB.query.all()
     return jsonify([k.to_dict() for k in ksbs])
 
-@app.post('/ksb')
+@app.post('/ksbs')
 def create_ksb():
     data = request.get_json()
 
@@ -230,12 +230,12 @@ def create_ksb():
 
     return jsonify(new_ksb.to_dict()), 201
 
-@app.route('/ksb/<string:ksb_id>', methods=['GET'])
+@app.route('/ksbs/<string:ksb_id>', methods=['GET'])
 def get_single_ksb(ksb_id):
     ksb = KSB.query.get_or_404(ksb_id)
     return jsonify(ksb.to_dict())
 
-@app.route('/ksb/<string:ksb_id>', methods=['PUT'])
+@app.route('/ksbs/<string:ksb_id>', methods=['PUT'])
 def update_ksb(ksb_id):
     ksb = KSB.query.get_or_404(ksb_id)
     data = request.get_json()
@@ -245,7 +245,7 @@ def update_ksb(ksb_id):
 
     return jsonify(ksb.to_dict())
 
-@app.delete('/ksb/<string:ksb_id>')
+@app.delete('/ksbs/<string:ksb_id>')
 def delete_ksb(ksb_id):
     ksb = KSB.query.get_or_404(ksb_id)
 
