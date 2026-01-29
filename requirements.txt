@@ -19,6 +19,7 @@ Pygments==2.19.2
 pytest==9.0.0
 pytest-cov==7.0.0
 pytest-mock==3.15.1
+python-dotenv==1.2.1
 requests==2.32.5
 SQLAlchemy==2.0.45
 toml==0.10.2

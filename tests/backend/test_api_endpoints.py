@@ -3,7 +3,7 @@ import os
 
 import uuid
 
-os.environ["db_url"] = "sqlite:///:memory:"
+os.environ["DB_URL"] = "sqlite:///:memory:"
 
 from app import app, db, Coin, Duty, KSB
 

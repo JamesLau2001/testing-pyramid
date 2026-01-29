@@ -3,17 +3,14 @@ from controllers.automate_duty import AutomateDutyController
 
 import uuid
 from flask_sqlalchemy import SQLAlchemy
-import config
 
 import os
 
 app = Flask(__name__)
 
-if os.environ.get("db_url"):
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("db_url")
-else:
-    import config
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.database}"
+if not app.config.get("SQLALCHEMY_DATABASE_URI"):
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URL")
+
 
 db = SQLAlchemy(app)
 
