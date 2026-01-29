@@ -40,6 +40,7 @@ resource "aws_instance" "app_server" {
   key_name               = "terraform-key"
   user_data = templatefile("${path.module}/cloud-init.yaml.tmpl", {
     instance_name = "james_lau_apprentice_end_game"
+    DB_URL = var.DB_URL
   })
 
   tags = {
