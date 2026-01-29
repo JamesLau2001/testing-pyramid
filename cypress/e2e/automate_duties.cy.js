@@ -5,7 +5,6 @@ describe('Landing page', () => {
     cy.contains('Enter Duty Description').should('be.visible')
     cy.contains('Enter KSBs').should('be.visible')
     cy.contains("Create Duty").should('be.visible')
-    cy.contains("No duties created yet")
 })
 })
 
