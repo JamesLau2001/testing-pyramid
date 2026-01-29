@@ -240,4 +240,4 @@ def delete_ksb(ksb_id):
     return "KSB successfully deleted", 200
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True, port=8080)
+    app.run(host="0.0.0.0", debug=True, port=5000)
