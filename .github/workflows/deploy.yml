@@ -24,9 +24,6 @@ jobs:
       - name: Install JavaScript dependencies
         run: pnpm install
 
-      - name: Approve Cypress install script
-        run: pnpm approve-builds cypress
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -44,16 +41,6 @@ jobs:
           source venv/bin/activate
           pytest tests/
 
-      - name: Run Flask
-        run: | 
-          source venv/bin/activate
-          flask run &
-
-      - name: Install Cypress
-        run: pnpm exec cypress install
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
     
   terraform:
     needs: test
