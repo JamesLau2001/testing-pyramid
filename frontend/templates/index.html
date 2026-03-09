@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Coins & Duties</title>
-</head>
-<body>
-    
-{% if username %}
-    Logged in as <strong>{{ username }}</strong> | <a href="/logout">Logout</a>
-{% else %}
-    <a href="/login">Login</a>
-{% endif %}
+{% extends "base.html" %}
+
+{% block title %}Coins & Duties{% endblock %}
+
+{% block content %}
 
 <h1>Coins</h1>
 
@@ -36,5 +28,4 @@
     <p>No coins found.</p>
 {% endif %}
 
-</body>
-</html>
+{% endblock %}
