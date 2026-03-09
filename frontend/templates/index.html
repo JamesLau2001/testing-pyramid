@@ -5,6 +5,12 @@
     <title>Coins & Duties</title>
 </head>
 <body>
+    
+{% if username %}
+    Logged in as <strong>{{ username }}</strong> | <a href="/logout">Logout</a>
+{% else %}
+    <a href="/login">Login</a>
+{% endif %}
 
 <h1>Coins</h1>
 
