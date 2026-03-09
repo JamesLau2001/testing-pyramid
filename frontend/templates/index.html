@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coins & Duties</title>
+</head>
+<body>
+
+<h1>Coins</h1>
+
+{% if coins %}
+    <ul>
+        {% for coin in coins %}
+            <li>
+                <strong>{{ coin.coin_name }}</strong>
+
+                {% if coin.duties %}
+                    <ul>
+                        {% for duty in coin.duties %}
+                            <li><a href="/duties/{{ duty.id }}">{{ duty.duty_name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <span>(no duties)</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No coins found.</p>
+{% endif %}
+
+</body>
+</html>

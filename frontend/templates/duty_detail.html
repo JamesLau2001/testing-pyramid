@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Duty: {{ duty.duty_name }}</title>
+</head>
+<body>
+
+    <a href="/">Back to Coins</a>
+
+    <h1>Duty: {{ duty.duty_name }}</h1>
+    <p>{{ duty.description }}</p>
+
+    <h2>Associated Coins</h2>
+    {% if associated_coins %}
+        <ul>
+            {% for coin in associated_coins %}
+                <li>{{ coin.coin_name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No coins associated with this duty.</p>
+    {% endif %}
+
+    {% if duty.ksbs %}
+        <h2>KSBs</h2>
+        <ul>
+            {% for ksb in duty.ksbs %}
+                <li>{{ ksb.ksb_name }}: {{ ksb.description }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</body>
+</html>
