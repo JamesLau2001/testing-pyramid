@@ -23,6 +23,7 @@ with app.app_context():
     db.create_all()
 
 BACKEND_URL = 'http://localhost:5000'
+completions = set()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -45,7 +46,21 @@ def logout():
 @app.route('/')
 def index():
     coins = requests.get(f'{BACKEND_URL}/coins').json()
-    return render_template('index.html', coins=coins, username=session.get('username'))
+
+    for coin in coins:
+        coin['completed'] = coin['id'] in completions
+
+    return render_template('index.html', coins=coins, username=session.get('username'), role=session.get('role'))
+
+@app.post('/coins/<id>/toggle_completion')
+def toggle_coin_completion(id):
+    if session.get('role') not in ('authenticated', 'admin'):
+        return redirect('/login')
+    if id in completions:
+        completions.discard(id)
+    else:
+        completions.add(id)
+    return redirect('/')
 
 @app.route('/duties/<string:duty_id>')
 def duty_detail(duty_id):

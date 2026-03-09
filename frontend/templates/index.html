@@ -12,6 +12,14 @@
             <li>
                 <strong>{{ coin.coin_name }}</strong>
 
+                {% if role in ['authenticated', 'admin'] %}
+                    <form method="POST" action="/coins/{{ coin.id }}/toggle_completion">
+                        <input type="checkbox" {% if coin.completed %}checked{% endif %} onchange="this.form.submit()"> Completed
+                    </form>
+                {% else %}
+                    {% if coin.completed %}✅ Completed{% else %}❌ Not completed{% endif %}
+                {% endif %}
+
                 {% if coin.duties %}
                     <ul>
                         {% for duty in coin.duties %}
