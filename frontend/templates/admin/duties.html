@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Admin: Duties{% endblock %}
+
+{% block content %}
+
+<h1>Manage Duties</h1>
+
+<h2>Create Duty</h2>
+<form method="POST" action="/admin/duties/create">
+    <label>Duty name: <input type="text" name="duty_name" required></label><br>
+    <label>Description: <input type="text" name="description" required></label><br>
+    {% for ksb in ksbs %}
+        <label>
+            <input type="checkbox" name="ksbs" value="{{ ksb.ksb_name }}">
+            {{ ksb.ksb_name }}
+        </label>
+    {% endfor %}
+    <button type="submit">Create</button>
+</form>
+
+
+<h2>Existing Duties</h2>
+{% if duties %}
+    {% for duty in duties %}
+        <p><strong>{{ duty.duty_name }}</strong>: {{ duty.description }}</p>
+
+        <form method="POST" action="/admin/duties/{{ duty.id }}/update">
+            <input type="text" name="duty_name" value="{{ duty.duty_name }}" required><br>
+            <input type="text" name="description" value="{{ duty.description }}" required><br>
+            {% for ksb in ksbs %}
+                <label>
+                    <input type="checkbox" name="ksbs" value="{{ ksb.ksb_name }}"
+                        {% if ksb.ksb_name in duty.ksbs | map(attribute='ksb_name') | list %}checked{% endif %}>
+                    {{ ksb.ksb_name }}
+                </label>
+            {% endfor %}
+            <button type="submit">Update</button>
+        </form>
+
+        <form method="POST" action="/admin/duties/{{ duty.id }}/delete">
+            <button type="submit">Delete</button>
+        </form>
+
+        
+    {% endfor %}
+{% else %}
+    <p>No duties found.</p>
+{% endif %}
+
+{% endblock %}

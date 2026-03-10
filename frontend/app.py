@@ -120,5 +120,42 @@ def admin_delete_coin(coin_id):
     requests.delete(f'{BACKEND_URL}/coins/{coin_id}')
     return redirect('/admin/coins')
 
+@app.route('/admin/duties')
+@login_required
+@admin_required
+def admin_duties():
+    duties = requests.get(f'{BACKEND_URL}/duties').json()
+    ksbs = requests.get(f'{BACKEND_URL}/ksbs').json()
+    return render_template('admin/duties.html', duties=duties, ksbs=ksbs,
+                           username=session.get('username'), role=session.get('role'))
+
+@app.route('/admin/duties/create', methods=['POST'])
+@login_required
+@admin_required
+def admin_create_duty():
+    duty_name = request.form['duty_name']
+    description = request.form['description']
+    ksbs = request.form.getlist('ksbs')
+    requests.post(f'{BACKEND_URL}/duties', json={'duty_name': duty_name, 'description': description, 'ksbs': ksbs})
+    return redirect('/admin/duties')
+
+@app.route('/admin/duties/<string:duty_id>/update', methods=['POST'])
+@login_required
+@admin_required
+def admin_update_duty(duty_id):
+    duty_name = request.form['duty_name']
+    description = request.form['description']
+    ksbs = request.form.getlist('ksbs')
+    requests.put(f'{BACKEND_URL}/duties/{duty_id}', json={'duty_name': duty_name, 'description': description, 'ksbs': ksbs})
+    return redirect('/admin/duties')
+
+@app.route('/admin/duties/<string:duty_id>/delete', methods=['POST'])
+@login_required
+@admin_required
+def admin_delete_duty(duty_id):
+    requests.delete(f'{BACKEND_URL}/duties/{duty_id}')
+    return redirect('/admin/duties')
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
