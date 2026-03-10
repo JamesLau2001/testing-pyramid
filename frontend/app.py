@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
+from collections import deque
+from datetime import datetime
 import requests
 import os
 from dotenv import load_dotenv
@@ -25,6 +27,7 @@ with app.app_context():
 
 BACKEND_URL = 'http://localhost:5000'
 completions = set()
+request_log = deque(maxlen=100)
 
 def login_required(f):
     @wraps(f)
@@ -41,6 +44,16 @@ def admin_required(f):
             abort(403)
         return f(*args, **kwargs)
     return decorated
+
+@app.before_request
+def log_request():
+    request_log.append({
+        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+        'method': request.method,
+        'path': request.path,
+        'user': session.get('username', 'anonymous'),
+        'ip': request.remote_addr
+    })
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -84,7 +97,7 @@ def duty_detail(duty_id):
     duty = requests.get(f'{BACKEND_URL}/duties/{duty_id}').json()
     all_coins = requests.get(f'{BACKEND_URL}/coins').json()
     associated_coins = [c for c in all_coins if any(d['id'] == duty_id for d in c['duties'])]
-    return render_template('duty_detail.html', duty=duty, associated_coins=associated_coins, username=session.get('username'))
+    return render_template('duty_detail.html', duty=duty, associated_coins=associated_coins, username=session.get('username'), role=session.get('role'))
 
 @app.route('/admin/coins')
 @login_required
@@ -156,6 +169,13 @@ def admin_delete_duty(duty_id):
     requests.delete(f'{BACKEND_URL}/duties/{duty_id}')
     return redirect('/admin/duties')
 
+@app.route('/admin/logs')
+@login_required
+@admin_required
+def admin_logs():
+    logs = list(reversed(request_log))
+    return render_template('admin/logs.html', logs=logs,
+                           username=session.get('username'), role=session.get('role'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
