@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 import requests
 import os
 from dotenv import load_dotenv
@@ -24,6 +25,22 @@ with app.app_context():
 
 BACKEND_URL = 'http://localhost:5000'
 completions = set()
+
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'username' not in session:
+            return redirect('/login')
+        return f(*args, **kwargs)
+    return decorated
+
+def admin_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if session.get('role') != 'admin':
+            abort(403)
+        return f(*args, **kwargs)
+    return decorated
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
