@@ -9,6 +9,9 @@
     <nav>
         {% if username %}
             Logged in as <strong>{{ username }}</strong> | <a href="/logout">Logout</a>
+            {% if role == 'admin' %}
+                | <a href="/admin/coins">Manage Coins</a>
+            {% endif %}
         {% else %}
             <a href="/login">Login</a>
         {% endif %}

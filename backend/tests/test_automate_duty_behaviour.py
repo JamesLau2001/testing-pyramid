@@ -1,11 +1,13 @@
 import unittest
 from morelia import run, verify
 from models.automate_duty import AutomateDuty
+import os
 
 class AutomateDutyTestCase(unittest.TestCase):
     duty = AutomateDuty("Random Number", "Random Description", "Random KSB")
     def test_duty_save_behaviour(self):
-        verify('tests/automate_duty.feature', self)
+        feature_file = os.path.join(os.path.dirname(__file__), "automate_duty.feature")
+        verify(feature_file, self)
     
     def step_I_save_a_duty(self):
         r'I save a duty'      

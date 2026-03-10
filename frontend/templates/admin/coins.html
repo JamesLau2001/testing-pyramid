@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Admin: Coins{% endblock %}
+
+{% block content %}
+
+<h1>Manage Coins</h1>
+
+<h2>Create Coin</h2>
+<form method="POST" action="/admin/coins/create">
+    <label>Coin name: <input type="text" name="coin_name" required></label><br>
+    {% for duty in duties %}
+        <label>
+            <input type="checkbox" name="duties" value="{{ duty.duty_name }}">
+            {{ duty.duty_name }}
+        </label><br>
+    {% endfor %}
+    <button type="submit">Create</button>
+</form>
+
+
+<h2>Existing Coins</h2>
+{% if coins %}
+    {% for coin in coins %}
+        <p><strong>{{ coin.coin_name }}</strong></p>
+
+        <form method="POST" action="/admin/coins/{{ coin.id }}/update">
+            <input type="text" name="coin_name" value="{{ coin.coin_name }}" required><br>
+            {% for duty in duties %}
+                <label>
+                    <input type="checkbox" name="duties" value="{{ duty.duty_name }}"
+                        {% if duty.duty_name in coin.duties | map(attribute='duty_name') | list %}checked{% endif %}>
+                    {{ duty.duty_name }}
+                </label>
+            {% endfor %}
+            <button type="submit">Update</button>
+        </form>
+
+        <form method="POST" action="/admin/coins/{{ coin.id }}/delete">
+            <button type="submit">Delete</button>
+        </form>
+
+        
+    {% endfor %}
+{% else %}
+    <p>No coins found.</p>
+{% endif %}
+
+{% endblock %}

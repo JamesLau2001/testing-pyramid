@@ -86,5 +86,39 @@ def duty_detail(duty_id):
     associated_coins = [c for c in all_coins if any(d['id'] == duty_id for d in c['duties'])]
     return render_template('duty_detail.html', duty=duty, associated_coins=associated_coins, username=session.get('username'))
 
+@app.route('/admin/coins')
+@login_required
+@admin_required
+def admin_coins():
+    coins = requests.get(f'{BACKEND_URL}/coins').json()
+    duties = requests.get(f'{BACKEND_URL}/duties').json()
+    return render_template('admin/coins.html', coins=coins, duties=duties,
+                           username=session.get('username'), role=session.get('role'))
+
+@app.route('/admin/coins/create', methods=['POST'])
+@login_required
+@admin_required
+def admin_create_coin():
+    coin_name = request.form['coin_name']
+    duties = request.form.getlist('duties')
+    requests.post(f'{BACKEND_URL}/coins', json={'coin_name': coin_name, 'duties': duties})
+    return redirect('/admin/coins')
+
+@app.route('/admin/coins/<string:coin_id>/update', methods=['POST'])
+@login_required
+@admin_required
+def admin_update_coin(coin_id):
+    coin_name = request.form['coin_name']
+    duties = request.form.getlist('duties')
+    requests.put(f'{BACKEND_URL}/coins/{coin_id}', json={'coin_name': coin_name, 'duties': duties})
+    return redirect('/admin/coins')
+
+@app.route('/admin/coins/<string:coin_id>/delete', methods=['POST'])
+@login_required
+@admin_required
+def admin_delete_coin(coin_id):
+    requests.delete(f'{BACKEND_URL}/coins/{coin_id}')
+    return redirect('/admin/coins')
+
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
