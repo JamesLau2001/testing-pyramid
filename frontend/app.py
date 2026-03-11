@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY")
+app.secret_key = os.getenv("SECRET_KEY", "secret")
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
 db = SQLAlchemy(app)
@@ -25,7 +25,7 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
 
-BACKEND_URL = 'http://localhost:5000'
+BACKEND_URL = os.getenv("BACKEND_URL", "http://backend:5000")
 completions = set()
 request_log = deque(maxlen=100)
 
@@ -176,6 +176,3 @@ def admin_logs():
     logs = list(reversed(request_log))
     return render_template('admin/logs.html', logs=logs,
                            username=session.get('username'), role=session.get('role'))
-
-if __name__ == '__main__':
-    app.run(debug=True, port=3000)

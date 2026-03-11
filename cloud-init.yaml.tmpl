@@ -6,6 +6,7 @@ packages:
   - git
   - docker.io
   - nginx-extras
+  - docker-compose
 
 write_files:
   - path: /etc/nginx/sites-available/my-site.conf
@@ -49,12 +50,10 @@ runcmd:
   - systemctl enable docker
   - git clone https://github.com/JamesLau2001/testing-pyramid.git /home/ubuntu/testing-pyramid
   - |
-    cat > /home/ubuntu/testing-pyramid/.env << 'EOF'
+    cat > /home/ubuntu/testing-pyramid/backend/.env << 'EOF'
     DB_URL='${DB_URL}'
     EOF
-  - chmod 600 /home/ubuntu/testing-pyramid/.env
-  - chown ubuntu:ubuntu /home/ubuntu/testing-pyramid/.env
-  - docker build -t testing-pyramid:latest /home/ubuntu/testing-pyramid
-  - docker stop testing-pyramid || true
-  - docker rm testing-pyramid || true
-  - docker run -d -p 5000:5000 --name testing-pyramid testing-pyramid:latest
+  - chmod 600 /home/ubuntu/testing-pyramid/backend/.env
+  - chown ubuntu:ubuntu /home/ubuntu/testing-pyramid/backend/.env
+  - cd //home/ubuntu/testing-pyramid && docker-compose up -d --build
+  - docker-compose -f /home//home/ubuntu/testing-pyramid/docker-compose.yml exec -T frontend python seed.py
