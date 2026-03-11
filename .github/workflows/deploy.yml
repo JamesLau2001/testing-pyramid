@@ -58,6 +58,9 @@ jobs:
         run: |
           source venv/bin/activate
           pytest backend/tests/
+          
+      - name: Run Seed
+        run: docker-compose exec frontend python seed.py
 
       - name: Install Cypress
         run: pnpm exec cypress install
