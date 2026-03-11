@@ -52,19 +52,18 @@ jobs:
           python3 -m venv venv
           source venv/bin/activate
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
 
       - name: Run tests
         run: |
           source venv/bin/activate
-          pytest tests/
+          pytest backend/tests/
 
       - name: Install Cypress
         run: pnpm exec cypress install
 
       - name: Cypress run
         uses: cypress-io/github-action@v6
-        
+
       - name: Tear down cluster
         if: always()
         run: docker-compose down
