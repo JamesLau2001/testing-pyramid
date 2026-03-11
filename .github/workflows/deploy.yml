@@ -39,7 +39,7 @@ jobs:
 
       - name: Set up backend env
         run: |
-          echo "db_url='${{ secrets.DB_URL }}'" > backend/.env
+          echo "DB_URL='${{ secrets.DB_URL }}'" > backend/.env
       
       - name: Start Docker cluster
         run: docker-compose up -d --build
