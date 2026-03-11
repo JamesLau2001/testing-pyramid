@@ -59,6 +59,12 @@ jobs:
           source venv/bin/activate
           pytest tests/
 
+      - name: Install Cypress
+        run: pnpm exec cypress install
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        
       - name: Tear down cluster
         if: always()
         run: docker-compose down
